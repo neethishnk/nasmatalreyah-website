@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NasmatAlReyah Technical Service L.L.C – Dubai, UAE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #d42b2b;
+      --red-dark: #a81f1f;
+      --red-light: #f04444;
+      --black: #111111;
+      --dark: #1a1a1a;
+      --gray: #2d2d2d;
+      --mid: #666;
+      --light: #f5f5f5;
+      --white: #ffffff;
+      --font-en: 'Inter', sans-serif;
+      --font-ar: 'Noto Kufi Arabic', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-en);
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* Arabic mode */
+    html[lang="ar"] body { font-family: var(--font-ar); }
+    html[lang="ar"] * { letter-spacing: 0 !important; }
+    html[lang="ar"] .section-title { line-height: 1.4; }
+    html[lang="ar"] .hero-title { line-height: 1.3; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 68px;
+      background: rgba(10,10,10,0.93);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(212,43,43,0.2);
+      transition: background 0.3s;
+    }
+
+    .nav-logo { display: flex; flex-direction: column; gap: 2px; cursor: pointer; }
+    .nav-logo .en { font-size: 1rem; font-weight: 800; color: var(--white); }
+    .nav-logo .en span { color: var(--red); }
+    .nav-logo .ar { font-family: var(--font-ar); font-size: 0.72rem; color: rgba(255,255,255,0.45); direction: rtl; }
+
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.7); text-decoration: none;
+      font-size: 0.83rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--red-light); }
+
+    /* Language toggle */
+    .lang-toggle {
+      display: flex; align-items: center; gap: 0;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; overflow: hidden; cursor: pointer;
+    }
+    .lang-btn {
+      padding: 0.38rem 0.7rem;
+      font-size: 0.75rem; font-weight: 700;
+      color: rgba(255,255,255,0.45);
+      background: transparent; border: none; cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      font-family: inherit;
+    }
+    .lang-btn.active { background: var(--red); color: var(--white); }
+    .lang-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.15); }
+
+    .nav-cta {
+      background: var(--red); color: var(--white);
+      padding: 0.5rem 1.2rem; border-radius: 5px;
+      text-decoration: none; font-size: 0.82rem; font-weight: 700;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .nav-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 68px; left: 0; right: 0; z-index: 99;
+      background: rgba(10,10,10,0.97);
+      border-bottom: 1px solid rgba(212,43,43,0.2);
+      padding: 1.5rem 5vw;
+      flex-direction: column; gap: 1rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 1rem; font-weight: 500; padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      overflow: hidden; background: var(--black);
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(212,43,43,0.16) 0%, transparent 50%),
+                  linear-gradient(225deg, rgba(212,43,43,0.08) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; opacity: 0.035;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-shapes {
+      position: absolute; top: 0; right: 0; bottom: 0; width: 45%; pointer-events: none;
+    }
+    .hero-shapes .shape { position: absolute; background: var(--red); }
+    .hero-shapes .s1 { width: 380px; height: 580px; top: -80px; right: -60px; opacity: 0.11; transform: rotate(-14deg) skewX(-8deg); animation: shapePulse 7s ease-in-out infinite; }
+    .hero-shapes .s2 { width: 220px; height: 380px; top: 120px; right: 160px; background: var(--red-dark); opacity: 0.07; transform: rotate(-7deg) skewX(-5deg); animation: shapePulse 7s ease-in-out infinite 1.8s; }
+    .hero-shapes .s3 { width: 100px; height: 260px; bottom: 80px; right: 80px; opacity: 0.13; transform: rotate(-18deg); animation: shapePulse 7s ease-in-out infinite 3.5s; }
+    @keyframes shapePulse { 0%,100%{opacity:0.12;transform:rotate(-15deg) skewX(-8deg) scale(1)} 50%{opacity:0.18;transform:rotate(-15deg) skewX(-8deg) scale(1.04)} }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 120px 5vw 80px;
+      max-width: 700px;
+    }
+    html[lang="ar"] .hero-content { max-width: 100%; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(212,43,43,0.13); border: 1px solid rgba(212,43,43,0.32);
+      color: var(--red-light); font-size: 0.76rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.38rem 0.9rem; border-radius: 100px;
+      margin-bottom: 1.4rem; animation: fadeUp 0.7s ease 0.2s both;
+    }
+    html[lang="ar"] .hero-tag { text-transform: none; letter-spacing: 0; }
+    .hero-tag::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--red-light); animation:blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      font-weight: 900; line-height: 1.06; color: var(--white);
+      animation: fadeUp 0.7s ease 0.4s both;
+    }
+    .hero-title .accent { color: var(--red); }
+    .hero-title .line2 {
+      display: block;
+      background: linear-gradient(90deg, var(--white), rgba(255,255,255,0.55));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .hero-sub {
+      margin-top: 1.4rem; font-size: 1rem; font-weight: 300;
+      color: rgba(255,255,255,0.58); line-height: 1.85; max-width: 500px;
+      animation: fadeUp 0.7s ease 0.6s both;
+    }
+    html[lang="ar"] .hero-sub { max-width: 100%; }
+
+    .hero-actions {
+      display: flex; gap: 1rem; margin-top: 2.2rem; flex-wrap: wrap;
+      animation: fadeUp 0.7s ease 0.8s both;
+    }
+    .btn-primary {
+      background: var(--red); color: var(--white);
+      padding: 0.85rem 2rem; border-radius: 6px;
+      text-decoration: none; font-weight: 700; font-size: 0.88rem;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 18px rgba(212,43,43,0.4);
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent; color: var(--white);
+      padding: 0.85rem 2rem; border-radius: 6px;
+      text-decoration: none; font-weight: 600; font-size: 0.88rem;
+      border: 1px solid rgba(255,255,255,0.22);
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.06); }
+
+    .hero-stats {
+      display: flex; gap: 2.5rem; margin-top: 3.5rem; flex-wrap: wrap;
+      animation: fadeUp 0.7s ease 1s both;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: 3px; }
+    .stat-num { font-size: 1.9rem; font-weight: 900; color: var(--white); line-height:1; }
+    .stat-num span { color: var(--red); }
+    .stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.08em; }
+    html[lang="ar"] .stat-label { text-transform: none; letter-spacing: 0; font-size: 0.78rem; }
+
+    .hero-scroll {
+      position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: rgba(255,255,255,0.25); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      animation: fadeUp 0.7s ease 1.2s both;
+    }
+    .scroll-line { width:1px; height:44px; background:linear-gradient(to bottom,rgba(212,43,43,0.8),transparent); animation:scrollLine 2s ease-in-out infinite; }
+    @keyframes scrollLine { 0%,100%{height:44px;opacity:1} 50%{height:16px;opacity:0.4} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── SECTIONS COMMON ── */
+    section { padding: 6rem 5vw; }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 0.8rem;
+    }
+    html[lang="ar"] .section-tag { text-transform: none; letter-spacing: 0; font-size: 0.82rem; }
+    .section-title { font-size: clamp(1.7rem, 2.8vw, 2.6rem); font-weight: 800; line-height: 1.15; }
+    .section-title .hl { color: var(--red); }
+    .section-sub { margin-top: 0.9rem; font-size: 0.96rem; color: var(--mid); line-height: 1.85; max-width: 540px; }
+    html[lang="ar"] .section-sub { max-width: 100%; }
+
+    /* ── ABOUT ── */
+    #about { background: var(--light); }
+
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4.5rem;
+      align-items: center; margin-top: 3.5rem;
+    }
+    .about-card-main {
+      background: var(--dark); border-radius: 14px; overflow: hidden;
+      aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; position: relative;
+    }
+    .about-card-main .bg-pattern {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(212,43,43,0.22) 0%, transparent 60%),
+                  linear-gradient(225deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+    }
+    .about-card-main svg { position: relative; z-index: 1; width: 70%; opacity: 0.16; }
+    .about-visual { position: relative; }
+    .about-badge {
+      position: absolute; bottom: -1.2rem; right: -1.2rem;
+      background: var(--red); color: var(--white);
+      border-radius: 10px; padding: 1rem 1.3rem;
+      display: flex; flex-direction: column; align-items: center;
+      box-shadow: 0 8px 28px rgba(212,43,43,0.45);
+    }
+    html[lang="ar"] .about-badge { right: auto; left: -1.2rem; }
+    .about-badge .num { font-size: 1.8rem; font-weight: 900; line-height: 1; }
+    .about-badge .txt { font-size: 0.68rem; font-weight: 600; text-align: center; opacity: 0.9; margin-top: 3px; }
+
+    .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin-top: 1.8rem; }
+    .pillar {
+      background: var(--white); border: 1px solid rgba(0,0,0,0.07);
+      border-radius: 10px; padding: 1.1rem;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .pillar:hover { border-color: rgba(212,43,43,0.28); box-shadow: 0 4px 18px rgba(212,43,43,0.09); transform: translateY(-2px); }
+    .pillar .icon { font-size: 1.3rem; margin-bottom: 0.45rem; }
+    .pillar .name { font-size: 0.83rem; font-weight: 700; }
+    .pillar .desc { font-size: 0.73rem; color: var(--mid); margin-top: 3px; line-height: 1.5; }
+
+    /* ── SERVICES ── */
+    #services { background: var(--white); }
+
+    .services-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.3rem; margin-top: 3rem;
+    }
+    .service-card {
+      background: var(--white); border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 13px; padding: 1.8rem; position: relative; overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    }
+    .service-card::before {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(135deg, rgba(212,43,43,0.04) 0%, transparent 70%);
+      opacity:0; transition:opacity 0.3s;
+    }
+    .service-card:hover { transform: translateY(-5px); box-shadow: 0 18px 44px rgba(0,0,0,0.09); border-color: rgba(212,43,43,0.18); }
+    .service-card:hover::before { opacity:1; }
+    .card-accent {
+      position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg,var(--red),var(--red-light));
+      transform:scaleX(0); transform-origin:left; transition:transform 0.3s;
+    }
+    html[lang="ar"] .card-accent { transform-origin: right; }
+    .service-card:hover .card-accent { transform:scaleX(1); }
+    .service-icon {
+      width:48px; height:48px; border-radius:10px;
+      background:rgba(212,43,43,0.1);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.3rem; margin-bottom:1.1rem;
+      transition:background 0.2s;
+    }
+    .service-card:hover .service-icon { background:rgba(212,43,43,0.18); }
+    .service-name { font-size:1rem; font-weight:700; margin-bottom:0.5rem; }
+    .service-desc { font-size:0.82rem; color:var(--mid); line-height:1.7; }
+    .service-list { margin-top:0.9rem; list-style:none; display:flex; flex-direction:column; gap:5px; }
+    .service-list li { font-size:0.76rem; color:var(--mid); display:flex; align-items:flex-start; gap:7px; }
+    .service-list li::before { content:''; flex-shrink:0; width:4px; height:4px; border-radius:50%; background:var(--red); margin-top:6px; }
+
+    /* ── WHY US ── */
+    #why { background: var(--dark); }
+    #why .section-title { color: var(--white); }
+    #why .section-sub { color: rgba(255,255,255,0.48); }
+
+    .why-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.3rem; margin-top:3.5rem; }
+    .why-card {
+      background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+      border-radius:13px; padding:1.8rem; text-align:center;
+      transition:background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .why-card:hover { background:rgba(212,43,43,0.1); border-color:rgba(212,43,43,0.28); transform:translateY(-4px); }
+    .why-num { font-size:2.5rem; font-weight:900; color:var(--red); line-height:1; }
+    .why-label { font-size:0.88rem; font-weight:600; color:var(--white); margin-top:0.45rem; }
+    .why-desc { font-size:0.76rem; color:rgba(255,255,255,0.38); margin-top:0.35rem; line-height:1.6; }
+
+    /* ── PROCESS ── */
+    #process { background: var(--light); }
+
+    .process-steps {
+      display:grid; grid-template-columns:repeat(4,1fr);
+      gap:1rem; margin-top:3.5rem; position:relative;
+    }
+    .process-steps::before {
+      content:''; position:absolute;
+      top:2.4rem; left:12%; right:12%; height:2px;
+      background:linear-gradient(90deg,var(--red),rgba(212,43,43,0.15)); z-index:0;
+    }
+    .step { display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 0.8rem; position:relative; z-index:1; }
+    .step-num {
+      width:4.8rem; height:4.8rem; border-radius:50%;
+      background:var(--white); border:2px solid var(--red);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.2rem; font-weight:900; color:var(--red);
+      box-shadow:0 4px 14px rgba(212,43,43,0.18);
+      transition:background 0.2s, color 0.2s;
+    }
+    .step:hover .step-num { background:var(--red); color:var(--white); }
+    .step-title { font-size:0.88rem; font-weight:700; margin-top:1.1rem; }
+    .step-desc { font-size:0.76rem; color:var(--mid); margin-top:0.35rem; line-height:1.6; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--black); }
+    #contact .section-title { color: var(--white); }
+    #contact .section-sub { color: rgba(255,255,255,0.48); }
+
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:3.5rem; margin-top:3.5rem; align-items:start; }
+    .contact-info { display:flex; flex-direction:column; gap:1.2rem; }
+    .contact-item {
+      display:flex; align-items:center; gap:1.2rem;
+      background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+      border-radius:11px; padding:1.3rem;
+      transition:border-color 0.2s, background 0.2s;
+    }
+    .contact-item:hover { border-color:rgba(212,43,43,0.32); background:rgba(212,43,43,0.06); }
+    .contact-icon { width:44px; height:44px; flex-shrink:0; border-radius:9px; background:var(--red); display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+    .contact-label { font-size:0.7rem; color:rgba(255,255,255,0.32); text-transform:uppercase; letter-spacing:0.1em; font-weight:600; }
+    html[lang="ar"] .contact-label { text-transform:none; letter-spacing:0; font-size:0.78rem; }
+    .contact-value { font-size:0.95rem; font-weight:600; color:var(--white); margin-top:2px; }
+    .contact-value a { color:inherit; text-decoration:none; }
+    .contact-value a:hover { color:var(--red-light); }
+    .contact-company { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:11px; padding:1.3rem; }
+    .co-name { font-size:1.05rem; font-weight:800; color:var(--white); }
+    .co-name span { color:var(--red); }
+    .co-ar { font-family:var(--font-ar); direction:rtl; font-size:0.9rem; color:rgba(255,255,255,0.38); margin-top:5px; }
+    html[lang="ar"] .co-ar { font-size:1rem; color:rgba(255,255,255,0.7); }
+    .co-loc { display:flex; align-items:center; gap:7px; margin-top:0.9rem; font-size:0.82rem; color:rgba(255,255,255,0.45); }
+
+    .contact-form { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:2.2rem; }
+    .form-title { font-size:1.15rem; font-weight:700; color:var(--white); margin-bottom:1.4rem; }
+    .form-group { margin-bottom:1.1rem; }
+    .form-group label { display:block; font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.45); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.45rem; }
+    html[lang="ar"] .form-group label { text-transform:none; letter-spacing:0; font-size:0.82rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      width:100%; background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.11); border-radius:7px;
+      padding:0.8rem 0.95rem; font-family:inherit; font-size:0.88rem; color:var(--white); outline:none;
+      transition:border-color 0.2s, background 0.2s;
+    }
+    .form-group select option { background:var(--dark); }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--red); background:rgba(212,43,43,0.06); }
+    .form-group textarea { resize:vertical; min-height:100px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .btn-submit {
+      width:100%; padding:0.95rem; background:var(--red); color:var(--white);
+      border:none; border-radius:7px; cursor:pointer;
+      font-family:inherit; font-size:0.92rem; font-weight:700;
+      transition:background 0.2s, transform 0.15s;
+      box-shadow:0 4px 18px rgba(212,43,43,0.38);
+    }
+    .btn-submit:hover { background:var(--red-dark); transform:translateY(-1px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background:#090909; border-top:1px solid rgba(255,255,255,0.05);
+      padding:1.8rem 5vw;
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+    }
+    .footer-copy { font-size:0.76rem; color:rgba(255,255,255,0.28); }
+    .footer-copy span { color:var(--red); }
+    .footer-links { display:flex; gap:1.4rem; list-style:none; }
+    .footer-links a { font-size:0.76rem; color:rgba(255,255,255,0.28); text-decoration:none; transition:color 0.2s; }
+    .footer-links a:hover { color:rgba(255,255,255,0.6); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-d1 { transition-delay:0.1s; }
+    .reveal-d2 { transition-delay:0.2s; }
+    .reveal-d3 { transition-delay:0.3s; }
+    .reveal-d4 { transition-delay:0.4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-steps { grid-template-columns: repeat(2, 1fr); }
+      .process-steps::before { display:none; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 4vw; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 4rem 4vw; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .hero-shapes { display: none; }
+      .hero-content { padding: 100px 4vw 60px; }
+      .hero-stats { gap: 1.8rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .about-badge { bottom: -1rem; right: -0.5rem; }
+      html[lang="ar"] .about-badge { right: auto; left: -0.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr; }
+      .pillars { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
+      .hero-title { font-size: clamp(1.9rem, 8vw, 2.8rem); }
+      .hero-sub { font-size: 0.92rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TRANSLATION DATA -->
+<script>
+const T = {
+  en: {
+    navAbout: "About",
+    navServices: "Services",
+    navWhy: "Why Us",
+    navProcess: "Process",
+    navContact: "Contact",
+    navCta: "Get a Quote",
+
+    heroTag: "Dubai, UAE · Technical Excellence",
+    heroTitle1: "NasmatAlReyah",
+    heroTitle2: "Technical Service",
+    heroSub: "Your trusted partner for AC, electrical, plumbing, carpentry, painting, masonry, interior design & building cleaning across Dubai.",
+    heroCta1: "Explore Services",
+    heroCta2: "Contact Us",
+    heroStat1Num: "10+", heroStat1Label: "Years Experience",
+    heroStat2Num: "10+", heroStat2Label: "Services Offered",
+    heroStat3Num: "24/7", heroStat3Label: "Support",
+
+    aboutTag: "Who We Are",
+    aboutTitle: 'Building Dubai, <span class="hl">One Project</span> at a Time',
+    aboutP1: "Our team of trained and certified technicians brings deep expertise across all building trades — from precision AC systems and complex electrical work to bespoke interior fit-outs and thorough cleaning services.",
+    aboutP2: "We serve homes, offices, retail spaces and commercial buildings throughout Dubai, always putting quality and client satisfaction first.",
+    aboutBadgeNum: "10+", aboutBadgeTxt: "Years in Dubai",
+    pillar1Name: "Certified Professionals", pillar1Desc: "Trained, licensed technicians across every trade",
+    pillar2Name: "Fast Response", pillar2Desc: "Rapid deployment for urgent repairs and maintenance",
+    pillar3Name: "Quality Guarantee", pillar3Desc: "Premium materials with lasting workmanship",
+    pillar4Name: "Client-First", pillar4Desc: "Tailored solutions to meet every requirement",
+
+    servicesTag: "What We Do",
+    servicesTitle: 'Our <span class="hl">Services</span>',
+    servicesSub: "A complete range of technical services for every building need — all under one roof.",
+
+    s1Name: "Mechanical & AC Servicing", s1Desc: "Over 10 years of experience across Window ACs, Split ACs, FCU, FAHU, FHU, Chillers and more.",
+    s1l1:"AC serving & duct/coil cleaning", s1l2:"Gas top up & chiller maintenance", s1l3:"Thermostat change & hardware replacement", s1l4:"New duct installation & AC leak repair",
+    s2Name: "Electrical Works", s2Desc: "Complete residential and commercial electrical solutions by professional electricians.",
+    s2l1:"Electrical fittings & DB connections", s2l2:"Troubleshooting short circuits", s2l3:"Chandeliers, lights & device fitting", s2l4:"Wire extensions, relays & new plug points",
+    s3Name: "Plumbing Works", s3Desc: "Trained and certified plumbing team for all fittings, repairs and new installations.",
+    s3l1:"Waterproofing & leak detection", s3l2:"Sanitary ware & water heater installation", s3l3:"Clog removal & drainage troubleshooting", s3l4:"New piping network (PPR, etc.)",
+    s4Name: "Masonry Works", s4Desc: "Professional masons with rich experience in all masonry and renovation projects.",
+    s4l1:"Parquet flooring & new tiling", s4l2:"Marble fittings & glass works", s4l3:"Bathroom & kitchen renovation", s4l4:"All grouting works",
+    s5Name: "Painting Services", s5Desc: "From accent walls to full buildings — interior, exterior, and specialty finishes.",
+    s5l1:"Internal & external painting", s5l2:"Spray painting for wood & metal", s5l3:"Texture painting & wallpaper installation", s5l4:"Epoxy painting for floors",
+    s6Name: "Carpentry & Fit Out", s6Desc: "Custom furniture and fixtures crafted from scratch with the highest quality workmanship.",
+    s6l1:"Wardrobes, TV racks & kitchen cabinets", s6l2:"High-end retail fixtures", s6l3:"Bespoke office furniture", s6l4:"Add-ons for existing furniture",
+    s7Name: "False Ceiling & Gypsum", s7Desc: "Modern ceiling designs, wall partitions and execution with high-grade materials.",
+    s7l1:"False ceiling installation", s7l2:"Wall partition systems", s7l3:"High-grade gypsum work",
+    s8Name: "Plaster Works", s8Desc: "High-quality plastering for walls and ceilings, ensuring smooth and flawless finishes.",
+    s8l1:"Wall plastering", s8l2:"Ceiling plastering", s8l3:"Smooth & textured finishes",
+    s9Name: "Interior Designing", s9Desc: "End-to-end interior solutions tailored precisely to client needs and style preferences.",
+    s9l1:"Space planning & concept design", s9l2:"Material & finish selection", s9l3:"Full project execution",
+    s10Name: "Building Cleaning", s10Desc: "Thorough and professional cleaning services for all types of buildings and spaces.",
+    s10l1:"Disinfection & sanitisation", s10l2:"Office & commercial cleaning", s10l3:"Duct & AC disinfection services",
+
+    whyTag: "Why Choose Us",
+    whyTitle: 'The NasmatAlReyah <span class="hl">Difference</span>',
+    whySub: "We combine technical mastery with genuine care for every project we take on.",
+    w1Num:"10+", w1Label:"Years of Expertise", w1Desc:"A decade of hands-on experience across every major trade in Dubai",
+    w2Num:"100%", w2Label:"Licensed & Certified", w2Desc:"Fully compliant with UAE regulations for all service categories",
+    w3Num:"1", w3Label:"Stop Solution", w3Desc:"Every building need handled by a single, trusted partner",
+    w4Num:"24/7", w4Label:"Available Support", w4Desc:"Round-the-clock availability for urgent maintenance requests",
+
+    processTag: "How It Works",
+    processTitle: 'Simple, <span class="hl">Transparent</span> Process',
+    processSub: "Getting your property serviced is easy. Here's what to expect from start to finish.",
+    p1Title:"Contact Us", p1Desc:"Call, email, or fill our form to describe your requirement.",
+    p2Title:"Site Assessment", p2Desc:"Our expert visits to assess the scope and prepare a quote.",
+    p3Title:"Execution", p3Desc:"Our skilled team completes the work on time, with care.",
+    p4Title:"Handover", p4Desc:"Final inspection, sign-off, and after-service support.",
+
+    contactTag: "Get In Touch",
+    contactTitle: 'Ready to <span class="hl">Start?</span>',
+    contactSub: "Reach out today and let's discuss your project. We're available for all types of residential and commercial work across Dubai.",
+    callLabel:"Call Us", emailLabel:"Email Us",
+    coLoc:"Dubai – United Arab Emirates",
+    formTitle:"Send Us a Message",
+    fName:"Your Name", fPhone:"Phone Number", fEmail:"Email Address",
+    fService:"Service Required", fServiceDefault:"Select a service...",
+    fMsg:"Message", fMsgPlaceholder:"Tell us about your project or requirement...",
+    fSubmit:"Send Message →",
+
+    footerCopy:'© 2025 <span>NasmatAlReyah</span> Technical Service L.L.C — Dubai, UAE',
+    footerAbout:"About", footerServices:"Services", footerContact:"Contact",
+  },
+  ar: {
+    navAbout: "من نحن",
+    navServices: "خدماتنا",
+    navWhy: "لماذا نحن",
+    navProcess: "كيف نعمل",
+    navContact: "تواصل معنا",
+    navCta: "احصل على عرض",
+
+    heroTag: "دبي، الإمارات · التميز التقني",
+    heroTitle1: "نسمة الريـاح",
+    heroTitle2: "للخدمات الفنية",
+    heroSub: "شريكك الموثوق في أعمال التكييف والكهرباء والسباكة والنجارة والدهان والبناء والتصميم الداخلي وتنظيف المباني في دبي.",
+    heroCta1: "استكشف الخدمات",
+    heroCta2: "تواصل معنا",
+    heroStat1Num: "+١٠", heroStat1Label: "سنوات خبرة",
+    heroStat2Num: "+١٠", heroStat2Label: "خدمة متكاملة",
+    heroStat3Num: "٢٤/٧", heroStat3Label: "دعم مستمر",
+
+    aboutTag: "من نحن",
+    aboutTitle: 'نبني دبي <span class="hl">مشروعاً</span> تلو الآخر',
+    aboutP1: "يضم فريقنا من الفنيين المدربين والمعتمدين خبرة عميقة في جميع مجالات البناء — من أنظمة التكييف الدقيقة والأعمال الكهربائية المعقدة إلى التجهيزات الداخلية الفاخرة وخدمات التنظيف الشاملة.",
+    aboutP2: "نخدم المنازل والمكاتب والمساحات التجارية والمباني في جميع أنحاء دبي، مع التركيز دائماً على الجودة ورضا العملاء.",
+    aboutBadgeNum: "+١٠", aboutBadgeTxt: "سنوات في دبي",
+    pillar1Name: "محترفون معتمدون", pillar1Desc: "فنيون مرخصون ومدربون في كل مجال",
+    pillar2Name: "استجابة سريعة", pillar2Desc: "نشر سريع للإصلاحات والصيانة العاجلة",
+    pillar3Name: "ضمان الجودة", pillar3Desc: "مواد عالية الجودة وحرفية تدوم",
+    pillar4Name: "العميل أولاً", pillar4Desc: "حلول مخصصة تلبي كل متطلباتك",
+
+    servicesTag: "ما نقدمه",
+    servicesTitle: '<span class="hl">خدماتنا</span>',
+    servicesSub: "مجموعة متكاملة من الخدمات التقنية لكل احتياجات المباني — تحت سقف واحد.",
+
+    s1Name: "الميكانيكا وخدمات التكييف", s1Desc: "أكثر من ١٠ سنوات خبرة في التكييف الشباك والسبليت وFCU وFAHU وFHU والتبريد المركزي وغيرها.",
+    s1l1:"صيانة التكييف وتنظيف المجاري", s1l2:"إضافة غاز وصيانة الشيلر", s1l3:"تغيير الثيرموستات والقطع", s1l4:"تركيب مجاري جديدة وإصلاح تسربات التكييف",
+    s2Name: "الأعمال الكهربائية", s2Desc: "حلول كهربائية متكاملة للمساكن والمنشآت التجارية بأيدي كهربائيين محترفين.",
+    s2l1:"التركيبات الكهربائية وتوصيلات DB", s2l2:"إصلاح الدوائر القصيرة", s2l3:"تركيب الثريات والإضاءة والأجهزة", s2l4:"مد الأسلاك والمرحلات ونقاط توصيل جديدة",
+    s3Name: "أعمال السباكة", s3Desc: "فريق سباكة مدرب ومعتمد لجميع التركيبات والإصلاحات والتمديدات الجديدة.",
+    s3l1:"العزل المائي وكشف التسربات", s3l2:"تركيب الصحي وسخانات المياه", s3l3:"إزالة الانسدادات وإصلاح الصرف", s3l4:"شبكات أنابيب جديدة (PPR وغيرها)",
+    s4Name: "أعمال البناء والتشطيب", s4Desc: "بنائون محترفون بخبرة واسعة في جميع أعمال البناء والتجديد.",
+    s4l1:"أرضيات الباركيه والبلاط الجديد", s4l2:"تركيب الرخام والزجاج", s4l3:"تجديد الحمامات والمطابخ", s4l4:"جميع أعمال التلييح",
+    s5Name: "خدمات الدهان", s5Desc: "من الجدران المميزة إلى المباني الكاملة — دهانات داخلية وخارجية وتشطيبات متخصصة.",
+    s5l1:"الدهان الداخلي والخارجي", s5l2:"الرش على الخشب والمعدن", s5l3:"دهان الأنسجة وتركيب ورق الجدران", s5l4:"الدهان بالإيبوكسي للأرضيات",
+    s6Name: "النجارة والتجهيز الداخلي", s6Desc: "أثاث وتجهيزات مخصصة من الصفر بأعلى معايير الجودة والحرفية.",
+    s6l1:"خزائن ورفوف تلفزيون وخزائن مطبخ", s6l2:"تجهيزات محلات التجزئة الراقية", s6l3:"أثاث مكتبي حسب الطلب", s6l4:"إضافات وتعديلات على الأثاث الموجود",
+    s7Name: "الأسقف المعلقة والجبس", s7Desc: "تصاميم أسقف عصرية وقواطع جدارية بأعلى جودة من المواد.",
+    s7l1:"تركيب الأسقف المعلقة", s7l2:"أنظمة قواطع الجدران", s7l3:"أعمال الجبس عالية الجودة",
+    s8Name: "أعمال اللياسة", s8Desc: "لياسة عالية الجودة للجدران والأسقف لضمان نعومة ونظافة تامة في التشطيب.",
+    s8l1:"لياسة الجدران", s8l2:"لياسة الأسقف", s8l3:"تشطيبات ناعمة وملمسية",
+    s9Name: "التصميم الداخلي", s9Desc: "حلول داخلية متكاملة مصممة خصيصاً وفق احتياجات العميل وذوقه.",
+    s9l1:"تخطيط الفضاء وتصميم المفهوم", s9l2:"اختيار المواد والتشطيبات", s9l3:"التنفيذ الكامل للمشروع",
+    s10Name: "تنظيف المباني", s10Desc: "خدمات تنظيف شاملة واحترافية لجميع أنواع المباني والمساحات.",
+    s10l1:"خدمات التعقيم والتطهير", s10l2:"تنظيف المكاتب والمنشآت التجارية", s10l3:"تعقيم المجاري والتكييف",
+
+    whyTag: "لماذا تختارنا",
+    whyTitle: 'ما يميّز <span class="hl">نسمة الريـاح</span>',
+    whySub: "نجمع بين الكفاءة التقنية والاهتمام الحقيقي بكل مشروع نتولاه.",
+    w1Num:"+١٠", w1Label:"سنوات خبرة", w1Desc:"عقد من الخبرة الميدانية في أهم المجالات في دبي",
+    w2Num:"١٠٠٪", w2Label:"مرخص ومعتمد", w2Desc:"ملتزمون بجميع أنظمة الإمارات في كل الخدمات",
+    w3Num:"١", w3Label:"نقطة حل واحدة", w3Desc:"جميع احتياجات مبناك لدى شريك واحد موثوق",
+    w4Num:"٢٤/٧", w4Label:"دعم متواصل", w4Desc:"متاحون على مدار الساعة للطلبات الطارئة",
+
+    processTag: "كيف نعمل",
+    processTitle: 'عملية <span class="hl">شفافة</span> وبسيطة',
+    processSub: "الحصول على خدمة لعقارك أمر سهل. إليك ما تتوقعه من البداية إلى النهاية.",
+    p1Title:"تواصل معنا", p1Desc:"اتصل أو راسلنا عبر البريد أو النموذج لوصف متطلباتك.",
+    p2Title:"تقييم الموقع", p2Desc:"يزور خبيرنا الموقع لتقييم النطاق وتحضير عرض الأسعار.",
+    p3Title:"التنفيذ", p3Desc:"يُنجز فريقنا الماهر العمل في الوقت المحدد وبعناية.",
+    p4Title:"التسليم", p4Desc:"فحص نهائي وتسليم رسمي مع دعم ما بعد الخدمة.",
+
+    contactTag: "تواصل معنا",
+    contactTitle: 'هل أنت <span class="hl">مستعد؟</span>',
+    contactSub: "تواصل معنا اليوم ولنناقش مشروعك. نحن متاحون لجميع أنواع الأعمال السكنية والتجارية في دبي.",
+    callLabel:"اتصل بنا", emailLabel:"راسلنا",
+    coLoc:"دبي – الإمارات العربية المتحدة",
+    formTitle:"أرسل لنا رسالة",
+    fName:"الاسم", fPhone:"رقم الهاتف", fEmail:"البريد الإلكتروني",
+    fService:"الخدمة المطلوبة", fServiceDefault:"اختر خدمة...",
+    fMsg:"الرسالة", fMsgPlaceholder:"أخبرنا عن مشروعك أو متطلباتك...",
+    fSubmit:"إرسال الرسالة ←",
+
+    footerCopy:'© 2025 <span>نسمة الريـاح</span> للخدمات الفنية ذ.م.م — دبي، الإمارات',
+    footerAbout:"من نحن", footerServices:"الخدمات", footerContact:"تواصل معنا",
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = T[lang];
+  const html = document.documentElement;
+  html.lang = lang;
+  html.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+  // Nav
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (t[key] !== undefined) {
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = t[key];
+      } else if (key.endsWith('Title') || key === 'footerCopy' || key === 'aboutTitle' || key.endsWith('Title') && key !== 'formTitle') {
+        el.innerHTML = t[key];
+      } else {
+        el.innerHTML = t[key];
+      }
+    }
+  });
+
+  // Lang buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+
+  // Title tag
+  document.title = lang === 'ar'
+    ? 'نسمة الريـاح للخدمات الفنية ذ.م.م – دبي، الإمارات'
+    : 'NasmatAlReyah Technical Service L.L.C – Dubai, UAE';
+}
+</script>
+
+<!-- ─── NAV ─── -->
+<nav id="navbar">
+  <div class="nav-logo" onclick="location.href='#hero'">
+    <div class="en">nasmat <span>AL REYAH</span></div>
+    <div class="ar">نسمة الريـاح للخدمات الفنية</div>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#about" data-t="navAbout">About</a></li>
+      <li><a href="#services" data-t="navServices">Services</a></li>
+      <li><a href="#why" data-t="navWhy">Why Us</a></li>
+      <li><a href="#process" data-t="navProcess">Process</a></li>
+      <li><a href="#contact" data-t="navContact">Contact</a></li>
+    </ul>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <div class="lang-divider"></div>
+      <button class="lang-btn" data-lang="ar" onclick="setLang('ar')" style="font-family:var(--font-ar)">ع</button>
+    </div>
+    <a href="#contact" class="nav-cta" data-t="navCta">Get a Quote</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" data-t="navAbout" onclick="closeMenu()">About</a>
+  <a href="#services" data-t="navServices" onclick="closeMenu()">Services</a>
+  <a href="#why" data-t="navWhy" onclick="closeMenu()">Why Us</a>
+  <a href="#process" data-t="navProcess" onclick="closeMenu()">Process</a>
+  <a href="#contact" data-t="navContact" onclick="closeMenu()">Contact</a>
+  <div style="display:flex;gap:0.8rem;padding-top:0.5rem">
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <div class="lang-divider"></div>
+      <button class="lang-btn" data-lang="ar" onclick="setLang('ar')" style="font-family:var(--font-ar)">ع</button>
+    </div>
+    <a href="#contact" class="nav-cta" data-t="navCta" onclick="closeMenu()">Get a Quote</a>
+  </div>
+</div>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-shapes">
+    <div class="shape s1"></div>
+    <div class="shape s2"></div>
+    <div class="shape s3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-tag" data-t="heroTag">Dubai, UAE · Technical Excellence</div>
+    <h1 class="hero-title">
+      <span class="accent" data-t="heroTitle1">NasmatAlReyah</span><br />
+      <span class="line2" data-t="heroTitle2">Technical Service</span>
+    </h1>
+    <p class="hero-sub" data-t="heroSub">Your trusted partner for AC, electrical, plumbing, carpentry, painting, masonry, interior design &amp; building cleaning across Dubai.</p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary" data-t="heroCta1">Explore Services</a>
+      <a href="#contact" class="btn-ghost" data-t="heroCta2">Contact Us</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num" data-t="heroStat1Num">10+</div>
+        <div class="stat-label" data-t="heroStat1Label">Years Experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-t="heroStat2Num">10+</div>
+        <div class="stat-label" data-t="heroStat2Label">Services Offered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" data-t="heroStat3Num">24/7</div>
+        <div class="stat-label" data-t="heroStat3Label">Support</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div></div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section id="about">
+  <div class="reveal">
+    <div class="section-tag" data-t="aboutTag">Who We Are</div>
+    <h2 class="section-title" data-t="aboutTitle">Building Dubai, <span class="hl">One Project</span> at a Time</h2>
+    <p class="section-sub" data-t="aboutSub"></p>
+  </div>
+  <div class="about-grid">
+    <div class="about-visual reveal reveal-d1">
+      <div class="about-card-main">
+        <div class="bg-pattern"></div>
+        <svg viewBox="0 0 200 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="40" y="0" width="120" height="280" fill="white"/>
+          <rect x="50" y="10" width="20" height="25" fill="#d42b2b" opacity="0.6"/>
+          <rect x="80" y="10" width="20" height="25" fill="#d42b2b" opacity="0.6"/>
+          <rect x="110" y="10" width="20" height="25" fill="#d42b2b" opacity="0.6"/>
+          <rect x="50" y="45" width="20" height="25" fill="#d42b2b" opacity="0.4"/>
+          <rect x="80" y="45" width="20" height="25" fill="#d42b2b" opacity="0.4"/>
+          <rect x="110" y="45" width="20" height="25" fill="#d42b2b" opacity="0.4"/>
+          <rect x="50" y="80" width="20" height="25" fill="#d42b2b" opacity="0.3"/>
+          <rect x="80" y="80" width="20" height="25" fill="#d42b2b" opacity="0.3"/>
+          <rect x="110" y="80" width="20" height="25" fill="#d42b2b" opacity="0.3"/>
+          <rect x="50" y="115" width="20" height="25" fill="#d42b2b" opacity="0.2"/>
+          <rect x="80" y="115" width="20" height="25" fill="#d42b2b" opacity="0.2"/>
+          <rect x="110" y="115" width="20" height="25" fill="#d42b2b" opacity="0.2"/>
+          <rect x="80" y="220" width="40" height="60" fill="#888"/>
+        </svg>
+      </div>
+      <div class="about-badge">
+        <div class="num" data-t="aboutBadgeNum">10+</div>
+        <div class="txt" data-t="aboutBadgeTxt">Years in Dubai</div>
+      </div>
+    </div>
+    <div class="reveal reveal-d2">
+      <p style="font-size:1rem;color:#444;line-height:1.9;margin-bottom:1.4rem;" data-t="aboutP1">Our team of trained and certified technicians brings deep expertise across all building trades — from precision AC systems and complex electrical work to bespoke interior fit-outs and thorough cleaning services.</p>
+      <p style="font-size:1rem;color:#444;line-height:1.9;margin-bottom:1.8rem;" data-t="aboutP2">We serve homes, offices, retail spaces and commercial buildings throughout Dubai, always putting quality and client satisfaction first.</p>
+      <div class="pillars">
+        <div class="pillar"><div class="icon">🏆</div><div class="name" data-t="pillar1Name">Certified Professionals</div><div class="desc" data-t="pillar1Desc">Trained, licensed technicians across every trade</div></div>
+        <div class="pillar"><div class="icon">⚡</div><div class="name" data-t="pillar2Name">Fast Response</div><div class="desc" data-t="pillar2Desc">Rapid deployment for urgent repairs and maintenance</div></div>
+        <div class="pillar"><div class="icon">🔒</div><div class="name" data-t="pillar3Name">Quality Guarantee</div><div class="desc" data-t="pillar3Desc">Premium materials with lasting workmanship</div></div>
+        <div class="pillar"><div class="icon">🤝</div><div class="name" data-t="pillar4Name">Client-First</div><div class="desc" data-t="pillar4Desc">Tailored solutions to meet every requirement</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SERVICES ─── -->
+<section id="services">
+  <div class="reveal">
+    <div class="section-tag" data-t="servicesTag">What We Do</div>
+    <h2 class="section-title" data-t="servicesTitle">Our <span class="hl">Services</span></h2>
+    <p class="section-sub" data-t="servicesSub">A complete range of technical services for every building need — all under one roof.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal reveal-d1"><div class="card-accent"></div><div class="service-icon">❄️</div><div class="service-name" data-t="s1Name">Mechanical &amp; AC Servicing</div><div class="service-desc" data-t="s1Desc">Over 10 years of experience across all AC systems.</div><ul class="service-list"><li data-t="s1l1">AC serving &amp; duct/coil cleaning</li><li data-t="s1l2">Gas top up &amp; chiller maintenance</li><li data-t="s1l3">Thermostat change &amp; hardware replacement</li><li data-t="s1l4">New duct installation &amp; AC leak repair</li></ul></div>
+    <div class="service-card reveal reveal-d2"><div class="card-accent"></div><div class="service-icon">⚡</div><div class="service-name" data-t="s2Name">Electrical Works</div><div class="service-desc" data-t="s2Desc">Complete residential and commercial electrical solutions.</div><ul class="service-list"><li data-t="s2l1">Electrical fittings &amp; DB connections</li><li data-t="s2l2">Troubleshooting short circuits</li><li data-t="s2l3">Chandeliers, lights &amp; device fitting</li><li data-t="s2l4">Wire extensions, relays &amp; new plug points</li></ul></div>
+    <div class="service-card reveal reveal-d3"><div class="card-accent"></div><div class="service-icon">🔧</div><div class="service-name" data-t="s3Name">Plumbing Works</div><div class="service-desc" data-t="s3Desc">Trained and certified plumbing team for all work.</div><ul class="service-list"><li data-t="s3l1">Waterproofing &amp; leak detection</li><li data-t="s3l2">Sanitary ware &amp; water heater installation</li><li data-t="s3l3">Clog removal &amp; drainage troubleshooting</li><li data-t="s3l4">New piping network (PPR, etc.)</li></ul></div>
+    <div class="service-card reveal reveal-d1"><div class="card-accent"></div><div class="service-icon">🪨</div><div class="service-name" data-t="s4Name">Masonry Works</div><div class="service-desc" data-t="s4Desc">Professional masons for all renovation projects.</div><ul class="service-list"><li data-t="s4l1">Parquet flooring &amp; new tiling</li><li data-t="s4l2">Marble fittings &amp; glass works</li><li data-t="s4l3">Bathroom &amp; kitchen renovation</li><li data-t="s4l4">All grouting works</li></ul></div>
+    <div class="service-card reveal reveal-d2"><div class="card-accent"></div><div class="service-icon">🖌️</div><div class="service-name" data-t="s5Name">Painting Services</div><div class="service-desc" data-t="s5Desc">Interior, exterior and specialty finishes for all properties.</div><ul class="service-list"><li data-t="s5l1">Internal &amp; external painting</li><li data-t="s5l2">Spray painting for wood &amp; metal</li><li data-t="s5l3">Texture painting &amp; wallpaper installation</li><li data-t="s5l4">Epoxy painting for floors</li></ul></div>
+    <div class="service-card reveal reveal-d3"><div class="card-accent"></div><div class="service-icon">🪵</div><div class="service-name" data-t="s6Name">Carpentry &amp; Fit Out</div><div class="service-desc" data-t="s6Desc">Custom furniture and fixtures from scratch.</div><ul class="service-list"><li data-t="s6l1">Wardrobes, TV racks &amp; kitchen cabinets</li><li data-t="s6l2">High-end retail fixtures</li><li data-t="s6l3">Bespoke office furniture</li><li data-t="s6l4">Add-ons for existing furniture</li></ul></div>
+    <div class="service-card reveal reveal-d1"><div class="card-accent"></div><div class="service-icon">🏗️</div><div class="service-name" data-t="s7Name">False Ceiling &amp; Gypsum</div><div class="service-desc" data-t="s7Desc">Modern ceiling designs and wall partitions.</div><ul class="service-list"><li data-t="s7l1">False ceiling installation</li><li data-t="s7l2">Wall partition systems</li><li data-t="s7l3">High-grade gypsum work</li></ul></div>
+    <div class="service-card reveal reveal-d2"><div class="card-accent"></div><div class="service-icon">🪣</div><div class="service-name" data-t="s8Name">Plaster Works</div><div class="service-desc" data-t="s8Desc">Smooth and flawless plaster finishes for walls and ceilings.</div><ul class="service-list"><li data-t="s8l1">Wall plastering</li><li data-t="s8l2">Ceiling plastering</li><li data-t="s8l3">Smooth &amp; textured finishes</li></ul></div>
+    <div class="service-card reveal reveal-d3"><div class="card-accent"></div><div class="service-icon">🏠</div><div class="service-name" data-t="s9Name">Interior Designing</div><div class="service-desc" data-t="s9Desc">End-to-end interior solutions tailored to client needs.</div><ul class="service-list"><li data-t="s9l1">Space planning &amp; concept design</li><li data-t="s9l2">Material &amp; finish selection</li><li data-t="s9l3">Full project execution</li></ul></div>
+    <div class="service-card reveal reveal-d1"><div class="card-accent"></div><div class="service-icon">🧹</div><div class="service-name" data-t="s10Name">Building Cleaning</div><div class="service-desc" data-t="s10Desc">Professional cleaning for all buildings and spaces.</div><ul class="service-list"><li data-t="s10l1">Disinfection &amp; sanitisation</li><li data-t="s10l2">Office &amp; commercial cleaning</li><li data-t="s10l3">Duct &amp; AC disinfection services</li></ul></div>
+  </div>
+</section>
+
+<!-- ─── WHY US ─── -->
+<section id="why">
+  <div class="reveal">
+    <div class="section-tag" data-t="whyTag">Why Choose Us</div>
+    <h2 class="section-title" data-t="whyTitle">The NasmatAlReyah <span class="hl">Difference</span></h2>
+    <p class="section-sub" data-t="whySub">We combine technical mastery with genuine care for every project we take on.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal reveal-d1"><div class="why-num" data-t="w1Num">10+</div><div class="why-label" data-t="w1Label">Years of Expertise</div><div class="why-desc" data-t="w1Desc">A decade of hands-on experience across every major trade in Dubai</div></div>
+    <div class="why-card reveal reveal-d2"><div class="why-num" data-t="w2Num">100%</div><div class="why-label" data-t="w2Label">Licensed &amp; Certified</div><div class="why-desc" data-t="w2Desc">Fully compliant with UAE regulations for all service categories</div></div>
+    <div class="why-card reveal reveal-d3"><div class="why-num" data-t="w3Num">1</div><div class="why-label" data-t="w3Label">Stop Solution</div><div class="why-desc" data-t="w3Desc">Every building need handled by a single, trusted partner</div></div>
+    <div class="why-card reveal reveal-d4"><div class="why-num" data-t="w4Num">24/7</div><div class="why-label" data-t="w4Label">Available Support</div><div class="why-desc" data-t="w4Desc">Round-the-clock availability for urgent maintenance requests</div></div>
+  </div>
+</section>
+
+<!-- ─── PROCESS ─── -->
+<section id="process">
+  <div class="reveal">
+    <div class="section-tag" data-t="processTag">How It Works</div>
+    <h2 class="section-title" data-t="processTitle">Simple, <span class="hl">Transparent</span> Process</h2>
+    <p class="section-sub" data-t="processSub">Getting your property serviced is easy.</p>
+  </div>
+  <div class="process-steps">
+    <div class="step reveal reveal-d1"><div class="step-num">01</div><div class="step-title" data-t="p1Title">Contact Us</div><div class="step-desc" data-t="p1Desc">Call, email, or fill our form to describe your requirement.</div></div>
+    <div class="step reveal reveal-d2"><div class="step-num">02</div><div class="step-title" data-t="p2Title">Site Assessment</div><div class="step-desc" data-t="p2Desc">Our expert visits to assess the scope and prepare a quote.</div></div>
+    <div class="step reveal reveal-d3"><div class="step-num">03</div><div class="step-title" data-t="p3Title">Execution</div><div class="step-desc" data-t="p3Desc">Our skilled team completes the work on time, with care.</div></div>
+    <div class="step reveal reveal-d4"><div class="step-num">04</div><div class="step-title" data-t="p4Title">Handover</div><div class="step-desc" data-t="p4Desc">Final inspection, sign-off, and after-service support.</div></div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact">
+  <div class="reveal">
+    <div class="section-tag" data-t="contactTag">Get In Touch</div>
+    <h2 class="section-title" data-t="contactTitle">Ready to <span class="hl">Start?</span></h2>
+    <p class="section-sub" data-t="contactSub">Reach out today and let's discuss your project.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info reveal reveal-d1">
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div><div class="contact-label" data-t="callLabel">Call Us</div><div class="contact-value"><a href="tel:+971528815429">+971-528815429</a></div></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">✉️</div>
+        <div><div class="contact-label" data-t="emailLabel">Email Us</div><div class="contact-value"><a href="mailto:nasmatalreyah@outlook.com">nasmatalreyah@outlook.com</a></div></div>
+      </div>
+      <div class="contact-company">
+        <div class="co-name">NasmatAlReyah <span>Technical</span> Service L.L.C</div>
+        <div class="co-ar">نسمة الريـاح للخدمات الفنية ذ.م.م</div>
+        <div class="co-loc" data-t="coLoc">Dubai – United Arab Emirates</div>
+      </div>
+    </div>
+    <div class="contact-form reveal reveal-d2">
+      <div class="form-title" data-t="formTitle">Send Us a Message</div>
+      <div class="form-row">
+        <div class="form-group"><label data-t="fName">Your Name</label><input type="text" data-t-placeholder="fName" placeholder="John Doe" /></div>
+        <div class="form-group"><label data-t="fPhone">Phone Number</label><input type="tel" placeholder="+971 XX XXX XXXX" /></div>
+      </div>
+      <div class="form-group"><label data-t="fEmail">Email Address</label><input type="email" placeholder="you@example.com" /></div>
+      <div class="form-group">
+        <label data-t="fService">Service Required</label>
+        <select>
+          <option data-t="fServiceDefault">Select a service...</option>
+          <option data-t="s1Name">Mechanical &amp; AC Servicing</option>
+          <option data-t="s2Name">Electrical Works</option>
+          <option data-t="s3Name">Plumbing Works</option>
+          <option data-t="s4Name">Masonry Works</option>
+          <option data-t="s5Name">Painting Services</option>
+          <option data-t="s6Name">Carpentry &amp; Fit Out</option>
+          <option data-t="s7Name">False Ceiling &amp; Gypsum</option>
+          <option data-t="s8Name">Plaster Works</option>
+          <option data-t="s9Name">Interior Designing</option>
+          <option data-t="s10Name">Building Cleaning</option>
+        </select>
+      </div>
+      <div class="form-group"><label data-t="fMsg">Message</label><textarea data-t-placeholder="fMsgPlaceholder" placeholder="Tell us about your project..."></textarea></div>
+      <button class="btn-submit" data-t="fSubmit" onclick="handleSubmit(event)">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <p class="footer-copy" data-t="footerCopy">© 2025 <span>NasmatAlReyah</span> Technical Service L.L.C — Dubai, UAE</p>
+  <ul class="footer-links">
+    <li><a href="#about" data-t="footerAbout">About</a></li>
+    <li><a href="#services" data-t="footerServices">Services</a></li>
+    <li><a href="#contact" data-t="footerContact">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.background =
+      window.scrollY > 60 ? 'rgba(10,10,10,0.98)' : 'rgba(10,10,10,0.93)';
+  });
+
+  // Hamburger
+  function toggleMenu() {
+    const h = document.getElementById('hamburger');
+    const m = document.getElementById('mobileMenu');
+    h.classList.toggle('open');
+    m.classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // Form submit
+  function handleSubmit(e) {
+    const btn = e.target;
+    const t = T[currentLang];
+    btn.textContent = currentLang === 'ar' ? '✓ تم الإرسال' : 'Message Sent ✓';
+    btn.style.background = '#1a9e4a';
+    setTimeout(() => { btn.innerHTML = t.fSubmit; btn.style.background = ''; }, 3000);
+  }
+
+  // Placeholder translation
+  function updatePlaceholders(lang) {
+    const t = T[lang];
+    document.querySelectorAll('[data-t-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-t-placeholder');
+      if (t[key]) el.placeholder = t[key];
+    });
+  }
+
+  // Patch setLang to also update placeholders
+  const _setLang = setLang;
+  // Already inline above — extend it:
+  const origSetLang = setLang;
+  window.setLang = function(lang) {
+    origSetLang(lang);
+    updatePlaceholders(lang);
+  };
+</script>
+</body>
+</html>
