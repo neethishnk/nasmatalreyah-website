@@ -420,6 +420,20 @@
     }
     .btn-submit:hover { background:var(--red-dark); transform:translateY(-1px); }
 
+    /* Field error states */
+    .form-group input.invalid,
+    .form-group select.invalid,
+    .form-group textarea.invalid {
+      border-color: #f04444 !important;
+      background: rgba(240,68,68,0.08) !important;
+    }
+    .field-error {
+      display: none; font-size: 0.72rem; color: #f07070;
+      margin-top: 5px; padding-left: 2px;
+    }
+    .field-error.visible { display: block; }
+    html[lang="ar"] .field-error { padding-left: 0; padding-right: 2px; }
+
     /* ── FOOTER ── */
     footer {
       background:#090909; border-top:1px solid rgba(255,255,255,0.05);
@@ -587,6 +601,9 @@ const T = {
     fService:"Service Required", fServiceDefault:"Select a service...",
     fMsg:"Message", fMsgPlaceholder:"Tell us about your project or requirement...",
     fSubmit:"Send Message →",
+    errName:"Name is required",
+    errPhone:"Enter a valid UAE number starting with 0 or 971",
+    errEmail:"Enter a valid email address",
     successTitle:"Message Received!",
     successDesc:"We've logged your enquiry and will get back to you shortly.",
     successBack:"Send another message",
@@ -673,6 +690,9 @@ const T = {
     fService:"الخدمة المطلوبة", fServiceDefault:"اختر خدمة...",
     fMsg:"الرسالة", fMsgPlaceholder:"أخبرنا عن مشروعك أو متطلباتك...",
     fSubmit:"إرسال الرسالة ←",
+    errName:"الاسم مطلوب",
+    errPhone:"أدخل رقم إماراتي صحيح يبدأ بـ 0 أو 971",
+    errEmail:"أدخل بريداً إلكترونياً صحيحاً",
     successTitle:"تم استلام رسالتك!",
     successDesc:"لقد سجّلنا استفسارك وسنتواصل معك قريباً.",
     successBack:"إرسال رسالة أخرى",
@@ -923,10 +943,22 @@ function setLang(lang) {
       <div id="formView">
         <div class="form-title" data-t="formTitle">Send Us a Message</div>
         <div class="form-row">
-          <div class="form-group"><label data-t="fName">Your Name</label><input id="f_name" type="text" data-t-placeholder="fName" placeholder="John Doe" /></div>
-          <div class="form-group"><label data-t="fPhone">Phone Number</label><input id="f_phone" type="tel" placeholder="+971 XX XXX XXXX" /></div>
+          <div class="form-group">
+            <label data-t="fName">Your Name</label>
+            <input id="f_name" type="text" data-t-placeholder="fName" placeholder="John Doe" oninput="clearErr('f_name','err_name')" />
+            <span class="field-error" id="err_name" data-t="errName">Name is required</span>
+          </div>
+          <div class="form-group">
+            <label data-t="fPhone">Phone Number</label>
+            <input id="f_phone" type="tel" placeholder="05X XXXXXXX or 971XXXXXXXXX" oninput="clearErr('f_phone','err_phone')" />
+            <span class="field-error" id="err_phone" data-t="errPhone">Enter a valid UAE number (05X… or 971…)</span>
+          </div>
         </div>
-        <div class="form-group"><label data-t="fEmail">Email Address</label><input id="f_email" type="email" placeholder="you@example.com" /></div>
+        <div class="form-group">
+          <label data-t="fEmail">Email Address</label>
+          <input id="f_email" type="email" placeholder="you@example.com" oninput="clearErr('f_email','err_email')" />
+          <span class="field-error" id="err_email" data-t="errEmail">Enter a valid email address</span>
+        </div>
         <div class="form-group">
           <label data-t="fService">Service Required</label>
           <select id="f_service">
@@ -1005,23 +1037,58 @@ function setLang(lang) {
   // Google Sheets endpoint
   const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxH6_4xCQd8sdf3C_NsjGPwH9DZZHpUFBWrlLHHitsqf3xgLR7eCXqGfogIHUCsVd7P/exec';
 
+  // UAE phone: starts with 0 (then 9 digits) OR 971 (then 9 digits)
+  // Strips spaces, dashes, parentheses before checking
+  function isValidUAEPhone(raw) {
+    const cleaned = raw.replace(/[\s\-().+]/g, '');
+    return /^(0\d{9}|971\d{9})$/.test(cleaned);
+  }
+
+  function isValidEmail(val) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  }
+
+  function showErr(fieldId, errId, msgKey) {
+    const field = document.getElementById(fieldId);
+    const err   = document.getElementById(errId);
+    field.classList.add('invalid');
+    err.textContent = T[currentLang][msgKey];
+    err.classList.add('visible');
+  }
+
+  function clearErr(fieldId, errId) {
+    document.getElementById(fieldId).classList.remove('invalid');
+    document.getElementById(errId).classList.remove('visible');
+  }
+
   async function handleSubmit(e) {
     const btn = document.getElementById('submitBtn');
     const t = T[currentLang];
 
-    // Basic validation
     const name    = document.getElementById('f_name').value.trim();
     const phone   = document.getElementById('f_phone').value.trim();
     const email   = document.getElementById('f_email').value.trim();
     const service = document.getElementById('f_service').value.trim();
     const message = document.getElementById('f_message').value.trim();
 
-    if (!name || !phone) {
-      const msg = currentLang === 'ar' ? 'يرجى إدخال الاسم ورقم الهاتف على الأقل' : 'Please enter at least your name and phone number.';
-      alert(msg); return;
-    }
+    // — Validate —
+    let valid = true;
 
-    // Loading state
+    if (!name) {
+      showErr('f_name', 'err_name', 'errName'); valid = false;
+    } else { clearErr('f_name', 'err_name'); }
+
+    if (!phone || !isValidUAEPhone(phone)) {
+      showErr('f_phone', 'err_phone', 'errPhone'); valid = false;
+    } else { clearErr('f_phone', 'err_phone'); }
+
+    if (email && !isValidEmail(email)) {
+      showErr('f_email', 'err_email', 'errEmail'); valid = false;
+    } else { clearErr('f_email', 'err_email'); }
+
+    if (!valid) return;
+
+    // — Loading state —
     btn.disabled = true;
     btn.innerHTML = currentLang === 'ar'
       ? '<span style="opacity:0.7">جارٍ الإرسال...</span>'
@@ -1034,7 +1101,6 @@ function setLang(lang) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, phone, email, service, message })
       });
-      // no-cors means we can't read the response — if fetch didn't throw, assume success
       showSuccess();
     } catch (err) {
       btn.disabled = false;
