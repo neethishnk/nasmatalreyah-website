@@ -587,6 +587,9 @@ const T = {
     fService:"Service Required", fServiceDefault:"Select a service...",
     fMsg:"Message", fMsgPlaceholder:"Tell us about your project or requirement...",
     fSubmit:"Send Message →",
+    successTitle:"Message Received!",
+    successDesc:"We've logged your enquiry and will get back to you shortly.",
+    successBack:"Send another message",
 
     footerCopy:'© 2025 <span>NasmatAlReyah</span> Technical Service L.L.C — Dubai, UAE',
     footerAbout:"About", footerServices:"Services", footerContact:"Contact",
@@ -670,6 +673,9 @@ const T = {
     fService:"الخدمة المطلوبة", fServiceDefault:"اختر خدمة...",
     fMsg:"الرسالة", fMsgPlaceholder:"أخبرنا عن مشروعك أو متطلباتك...",
     fSubmit:"إرسال الرسالة ←",
+    successTitle:"تم استلام رسالتك!",
+    successDesc:"لقد سجّلنا استفسارك وسنتواصل معك قريباً.",
+    successBack:"إرسال رسالة أخرى",
 
     footerCopy:'© 2025 <span>نسمة الريـاح</span> للخدمات الفنية ذ.م.م — دبي، الإمارات',
     footerAbout:"من نحن", footerServices:"الخدمات", footerContact:"تواصل معنا",
@@ -912,31 +918,41 @@ function setLang(lang) {
         <div class="co-loc" data-t="coLoc">Dubai – United Arab Emirates</div>
       </div>
     </div>
-    <div class="contact-form reveal reveal-d2">
-      <div class="form-title" data-t="formTitle">Send Us a Message</div>
-      <div class="form-row">
-        <div class="form-group"><label data-t="fName">Your Name</label><input type="text" data-t-placeholder="fName" placeholder="John Doe" /></div>
-        <div class="form-group"><label data-t="fPhone">Phone Number</label><input type="tel" placeholder="+971 XX XXX XXXX" /></div>
+    <div class="contact-form reveal reveal-d2" id="contactFormWrap">
+      <!-- Form view -->
+      <div id="formView">
+        <div class="form-title" data-t="formTitle">Send Us a Message</div>
+        <div class="form-row">
+          <div class="form-group"><label data-t="fName">Your Name</label><input id="f_name" type="text" data-t-placeholder="fName" placeholder="John Doe" /></div>
+          <div class="form-group"><label data-t="fPhone">Phone Number</label><input id="f_phone" type="tel" placeholder="+971 XX XXX XXXX" /></div>
+        </div>
+        <div class="form-group"><label data-t="fEmail">Email Address</label><input id="f_email" type="email" placeholder="you@example.com" /></div>
+        <div class="form-group">
+          <label data-t="fService">Service Required</label>
+          <select id="f_service">
+            <option value="" data-t="fServiceDefault">Select a service...</option>
+            <option data-t="s1Name">Mechanical &amp; AC Servicing</option>
+            <option data-t="s2Name">Electrical Works</option>
+            <option data-t="s3Name">Plumbing Works</option>
+            <option data-t="s4Name">Masonry Works</option>
+            <option data-t="s5Name">Painting Services</option>
+            <option data-t="s6Name">Carpentry &amp; Fit Out</option>
+            <option data-t="s7Name">False Ceiling &amp; Gypsum</option>
+            <option data-t="s8Name">Plaster Works</option>
+            <option data-t="s9Name">Interior Designing</option>
+            <option data-t="s10Name">Building Cleaning</option>
+          </select>
+        </div>
+        <div class="form-group"><label data-t="fMsg">Message</label><textarea id="f_message" data-t-placeholder="fMsgPlaceholder" placeholder="Tell us about your project..."></textarea></div>
+        <button class="btn-submit" id="submitBtn" data-t="fSubmit" onclick="handleSubmit(event)">Send Message →</button>
       </div>
-      <div class="form-group"><label data-t="fEmail">Email Address</label><input type="email" placeholder="you@example.com" /></div>
-      <div class="form-group">
-        <label data-t="fService">Service Required</label>
-        <select>
-          <option data-t="fServiceDefault">Select a service...</option>
-          <option data-t="s1Name">Mechanical &amp; AC Servicing</option>
-          <option data-t="s2Name">Electrical Works</option>
-          <option data-t="s3Name">Plumbing Works</option>
-          <option data-t="s4Name">Masonry Works</option>
-          <option data-t="s5Name">Painting Services</option>
-          <option data-t="s6Name">Carpentry &amp; Fit Out</option>
-          <option data-t="s7Name">False Ceiling &amp; Gypsum</option>
-          <option data-t="s8Name">Plaster Works</option>
-          <option data-t="s9Name">Interior Designing</option>
-          <option data-t="s10Name">Building Cleaning</option>
-        </select>
+      <!-- Success view -->
+      <div id="successView" style="display:none; text-align:center; padding:2rem 1rem;">
+        <div style="font-size:3rem; margin-bottom:1rem;">✅</div>
+        <div style="font-size:1.2rem; font-weight:800; color:#fff; margin-bottom:0.6rem;" data-t="successTitle">Message Received!</div>
+        <div style="font-size:0.88rem; color:rgba(255,255,255,0.5); line-height:1.7;" data-t="successDesc">We've logged your enquiry and will get back to you shortly.</div>
+        <button onclick="resetForm()" style="margin-top:1.5rem; background:transparent; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.6); padding:0.6rem 1.4rem; border-radius:6px; cursor:pointer; font-family:inherit; font-size:0.82rem;" data-t="successBack">Send another message</button>
       </div>
-      <div class="form-group"><label data-t="fMsg">Message</label><textarea data-t-placeholder="fMsgPlaceholder" placeholder="Tell us about your project..."></textarea></div>
-      <button class="btn-submit" data-t="fSubmit" onclick="handleSubmit(event)">Send Message →</button>
     </div>
   </div>
 </section>
@@ -986,13 +1002,63 @@ function setLang(lang) {
     document.getElementById('mobileMenu').classList.remove('open');
   }
 
-  // Form submit
-  function handleSubmit(e) {
-    const btn = e.target;
+  // Google Sheets endpoint
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxH6_4xCQd8sdf3C_NsjGPwH9DZZHpUFBWrlLHHitsqf3xgLR7eCXqGfogIHUCsVd7P/exec';
+
+  async function handleSubmit(e) {
+    const btn = document.getElementById('submitBtn');
     const t = T[currentLang];
-    btn.textContent = currentLang === 'ar' ? '✓ تم الإرسال' : 'Message Sent ✓';
-    btn.style.background = '#1a9e4a';
-    setTimeout(() => { btn.innerHTML = t.fSubmit; btn.style.background = ''; }, 3000);
+
+    // Basic validation
+    const name    = document.getElementById('f_name').value.trim();
+    const phone   = document.getElementById('f_phone').value.trim();
+    const email   = document.getElementById('f_email').value.trim();
+    const service = document.getElementById('f_service').value.trim();
+    const message = document.getElementById('f_message').value.trim();
+
+    if (!name || !phone) {
+      const msg = currentLang === 'ar' ? 'يرجى إدخال الاسم ورقم الهاتف على الأقل' : 'Please enter at least your name and phone number.';
+      alert(msg); return;
+    }
+
+    // Loading state
+    btn.disabled = true;
+    btn.innerHTML = currentLang === 'ar'
+      ? '<span style="opacity:0.7">جارٍ الإرسال...</span>'
+      : '<span style="opacity:0.7">Sending...</span>';
+
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, email, service, message })
+      });
+      // no-cors means we can't read the response — if fetch didn't throw, assume success
+      showSuccess();
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = t.fSubmit;
+      const msg = currentLang === 'ar' ? 'حدث خطأ، يرجى المحاولة مرة أخرى' : 'Something went wrong. Please try again.';
+      alert(msg);
+    }
+  }
+
+  function showSuccess() {
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('successView').style.display = 'block';
+  }
+
+  function resetForm() {
+    document.getElementById('f_name').value = '';
+    document.getElementById('f_phone').value = '';
+    document.getElementById('f_email').value = '';
+    document.getElementById('f_service').value = '';
+    document.getElementById('f_message').value = '';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').innerHTML = T[currentLang].fSubmit;
+    document.getElementById('successView').style.display = 'none';
+    document.getElementById('formView').style.display = 'block';
   }
 
   // Placeholder translation
